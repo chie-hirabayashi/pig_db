@@ -151,9 +151,9 @@ def delete_id(id_b, id_e):
         delete(id)
 
 
-id_b = 70
-id_e = 80
-delete_id(id_b, id_e)
+id_b = 1
+id_e = 65
+# delete_id(id_b, id_e)
 
 
 # 上書き確認
