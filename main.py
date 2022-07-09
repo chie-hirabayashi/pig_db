@@ -29,7 +29,7 @@ while command != "E":
     )
     command = input_command.upper()  # 大文字小文字区別なし
     if command in ["A", "D", "R", "F", "S", "C", "E"]:
-        if command == "A":
+        if command == "A":  # 新規登録
             new_no = input("登録する母豚NOを入力してください > ")
             new_day = input(f"{new_no}が入荷した日を入力してください(例:2022/7/7) ; ")
             create(new_no, new_day)
@@ -83,4 +83,4 @@ while command != "E":
         if command == "E":  # 終了
             print("終了します")
     else:
-        print(f"{command.lower()}: キーエラー ")
+        print(f"{command.lower()}: keyエラー ")

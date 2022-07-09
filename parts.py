@@ -271,11 +271,48 @@ def pig_info(pig_no, number_l, day_l):
     )
 
 
-# 最近の出産情報表示コード
+# dict形式で返す
+def pig_info_dic(pig_no, number_l, day_l):
+    born_span_l = []
+    for n in range(2, 13):
+        born_span = datetime.strptime(day_l[n + 1], "%Y/%m/%d") - datetime.strptime(
+            day_l[n], "%Y/%m/%d"
+        )
+        born_span_l.append(born_span)
+
+    idx = 10  # 初期値を設定 possibly unbound 回避
+    for n in range(0, 10):  # 直近の出産日index取得
+        if born_span_l[n].days < 0:
+            idx = born_span_l.index(born_span_l[n])
+            break
+        else:
+            idx = 10
+
+    if born_span_l[(idx - 1)].days == 0:
+        rotate = 0  # division by zero 回避
+    else:
+        rotate = 365 / born_span_l[(idx - 1)].days  # 回転数算出
+
+    d = Day.get(Day.pig_no == pig_no)
+    add_day = (datetime.strptime(d.add_day, "%Y/%m/%d")).strftime("%Y%m%d")
+    today = (datetime.now()).strftime("%Y%m%d")
+    age = int((int(today) - int(add_day) + 600) / 10000)
+
+    # 辞書リスト作成
+    rotate_ro = round(rotate, 2)
+    key = ["NO", "年齢", "出産日", "産子数", "回転数"]
+    value = [pig_no, age, day_l[idx + 2], number_l[idx + 1], rotate_ro]
+    pic_dic = dict(zip(key, value))  # すべてのpigの辞書作成
+    return pic_dic
+
+    # 最近の出産情報表示コード
+
+
 # pig_no = "28-10"
 # number_l = list_number(pig_no)
 # day_l = list_day(pig_no)
-# pig_info(pig_no, number_l, day_l)
+# pig_info_dic(pig_no, number_l, day_l)
+# print(pig_dic)
 
 
 """ Cコマンドで使用 """
@@ -353,6 +390,61 @@ def check(list_day):  # 2回以上出産した個体の平均算出
 
 # 全体の平均回転数を算出
 # check(list_day)
+
+# return形式
+def check_re(list_day):  # 2回以上出産した個体の平均算出
+    all_pig_l = []  # 空リスト用意(すべてのpigの辞書が入る)
+    for p in Day.select():
+        pig_no = p.pig_no
+        day_l = list_day(pig_no)
+        born_span_l = []
+        for n in range(2, 13):
+            born_span = datetime.strptime(day_l[n + 1], "%Y/%m/%d") - datetime.strptime(
+                day_l[n], "%Y/%m/%d"
+            )
+            born_span_l.append(born_span)
+        idx = 10  # 初期値を設定 possibly unbound 回避
+        print(born_span_l)
+        for n in range(0, 10):  # 直近の出産日index取得
+            if born_span_l[n].days < 0:
+                idx = born_span_l.index(born_span_l[n])
+                if idx == 0:  # pig_noが産子数(2)に入る防止
+                    idx = 1
+                else:
+                    pass
+                break
+            else:
+                idx = 10
+        if born_span_l[(idx - 1)].days == 0:
+            rotate = 0  # division by zero 回避
+        else:
+            rotate = 365 / born_span_l[(idx - 1)].days  # 回転数算出
+            if rotate < 0:  # 過去1回しか出産していない場合rotateがマイナスになる防止
+                rotate = 0
+            else:
+                pass
+
+        # 辞書リスト作成
+        key = ["pig_no", "rotate"]
+        value = [pig_no, f"{round(rotate,2)}"]
+        p_dic = dict(zip(key, value))  # すべてのpigの辞書作成
+        all_pig_l.append(p_dic)  # すべてのpigの辞書をリスト化
+    r_l = []
+    for i in range(len(all_pig_l)):  # 1つずつpigの辞書を取り出す
+        p_info = all_pig_l[i]
+        r = float(p_info["rotate"])
+        if 0 < r:
+            r_l.append(r)
+        else:
+            pass
+    print(r_l)
+
+    mean = statistics.mean(r_l)
+    return round(mean, 2)
+
+
+# 全体の平均回転数を算出
+# check_re(list_day)
 
 
 """ Sコマンドで使用 """
@@ -433,8 +525,98 @@ def search(list_number, list_day):
             pass
 
 
+# list形式で返す
+def search_list(list_number, list_day):
+    all_pig_l = []  # 空リスト用意(すべてのpigの辞書が入る)
+    for p in Day.select():
+        pig_no = p.pig_no
+        d = Day.get(Day.pig_no == pig_no)
+
+        #  age算出
+        add_day = (datetime.strptime(d.add_day, "%Y/%m/%d")).strftime("%Y%m%d")
+        today = (datetime.now()).strftime("%Y%m%d")
+        age = int((int(today) - int(add_day) + 600) / 10000)
+
+        # rotate算出
+        number_l = list_number(pig_no)
+        day_l = list_day(pig_no)
+        born_span_l = []
+        for n in range(2, 13):
+            born_span = datetime.strptime(day_l[n + 1], "%Y/%m/%d") - datetime.strptime(
+                day_l[n], "%Y/%m/%d"
+            )
+            born_span_l.append(born_span)
+        idx = 10  # 初期値を設定 possibly unbound 回避
+        print(born_span_l)
+        for n in range(0, 10):  # 直近の出産日index取得
+            if born_span_l[n].days < 0:
+                idx = born_span_l.index(born_span_l[n])
+                if idx == 0:  # pig_noが産子数(2)に入る防止
+                    idx = 1
+                else:
+                    pass
+                break
+            else:
+                idx = 10
+        if born_span_l[(idx - 1)].days == 0:
+            rotate = 0  # division by zero 回避
+        else:
+            rotate = 365 / born_span_l[(idx - 1)].days  # 回転数算出
+            if rotate < 0:  # 過去1回しか出産していない場合rotateがマイナスになる防止
+                rotate = 0
+            else:
+                pass
+
+        span = (datetime.now() - datetime.strptime(day_l[idx + 2], "%Y/%m/%d")).days
+
+        # 辞書リスト作成
+        key = ["pig_no", "age", "rotate", "num1", "num2", "span"]
+        value = [
+            pig_no,
+            age,
+            f"{round(rotate,2)}",
+            number_l[idx],
+            number_l[idx + 1],
+            span,
+        ]
+        p_dic = dict(zip(key, value))  # すべてのpigの辞書作成
+        all_pig_l.append(p_dic)  # すべてのpigの辞書をリスト化
+
+    pig_list = []
+    for i in range(len(all_pig_l)):  # 1つずつpigの辞書を取り出す
+        p_info = all_pig_l[i]
+        r = float(p_info["rotate"])
+        n1 = int(p_info["num1"])
+        n2 = int(p_info["num2"])
+        s = int(p_info["span"])
+        if 0 < r < 2.2 or (0 < n1 <= 8 and 0 < n2 <= 8) or 730 > s > 165:
+            rotate = round(365 / s, 2)
+            # key = ["NO", "年齢", "回転数", "産子数(1)", "産子数(2)", "予測回転数"]
+            value = [
+                f"{p_info['pig_no']}",
+                f"{p_info['age']}",
+                f"{p_info['rotate']}",
+                f"{p_info['num1']}",
+                f"{p_info['num2']}",
+                f"{rotate}",
+            ]
+            pig_list.append(value)
+            # pig_dic = dict(zip(key, value))  # すべてのpigの辞書作成
+
+            # print(
+            #     f"NO.{p_info['pig_no']}",
+            #     f"年齢:{p_info['age']}歳",
+            #     f"回転数:{p_info['rotate']}回",
+            #     f"産子数(1):{p_info['num1']}匹",
+            #     f"産子数(2):{p_info['num2']}匹",
+            #     f"予測回転数:{round(365/s,2)}回",  # 最後の出産日から165日経過した個体を抽出
+            # )
+    # search_list.append(pig_dic)
+    return pig_list
+
+
 # 生産性低い個体を探すキー
-# search(list_number, list_day)
+# search_list(list_number, list_day)
 
 
 """ Dコマンドで使用 """

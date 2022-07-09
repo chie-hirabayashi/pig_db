@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>豚さん管理システム</h1>
+    <article>
+        <ul>
+            <li>新規登録</li>
+            <li>廃用</li>
+            <li>出産情報の登録</li>
+            <li>個体情報の確認</li>
+            <li>生産性の低い母豚の確認</li>
+            <li>全体の生産性の確認</li>
+        </ul>
+    </article>
+    
+    <h2>新規登録</h2>
+    <p>▼ 新規登録する個体番号を入力してください</p>
+    <!-- フォーム作成 -->
+    <form action="/add" method="post">
+        個体番号: <input type="text" name="add_no" required><br>
+        入荷日: <input type="text" name="add_day" required><br>
+        <input type="submit" value="新規登録">
+    </form>
+    {% if add_no %}
+        <p>NO.{{ add_no }}の登録が完了しました </p>
+    {% endif %}
+        
+    <h2>廃用登録</h2>
+    <p>▼ 廃用にする個体番号を入力してください</p>
+    <!-- フォーム作成 -->
+    <form action="/delete" method="post">
+        個体番号: <input type="text" name="del_no" required><br>
+        <input type="submit" value="廃用登録">
+    </form>
+    {% if add_no %}
+        <p>NO.{{ del_no }}を廃用にしました </p>
+    {% endif %}
+    
+    <h2>出産情報の登録</h2>
+    <!-- フォーム作成 -->
+    <p>▼ 出産情報を登録する個体番号を入力してください</p>
+    <form action="/register" method="post">
+        個体番号: <input type="text" name="regi_no" required><br>
+        出産日: <input type="text" name="regi_day" required><br>
+        出産子数: <input type="int" name="regi_num" required><br>
+        <input type="submit" value="出産情報登録">
+    </form>
+    {% if add_no %}
+        <p>登録完了(NO.{{ register_no }}, 出産日:{{ new_born_day }}, 産子数:{{ new_born_number }})</p>
+    {% endif %}
+    
+    <h2>個体情報確認</h2>
+    <!-- フォーム作成 -->
+    <p>▼ 確認する個体番号を入力してください</p>
+    <form action="/find" method="post">
+        個体番号: <input type="text" name="find_no" required><br>
+        <input type="submit" value="確認">
+    </form>
+    {% if pig_dic %}
+        <p>NO:{{ pig_dic['NO'] }}</p>
+        <p>年齢:{{ pig_dic['年齢'] }}</p>
+        <p>出産日:{{ pig_dic['出産日'] }}</p>
+        <p>産子数:{{ pig_dic['産子数'] }}</p>
+        <p>回転数:{{ pig_dic['回転数'] }}</p>
+    {% endif %}
+    
+    <h2>生産性の悪い豚を抽出</h2>
+    <!-- フォーム作成 -->
+    <p>▼ 確認ボタンをぽちっっ</p>
+    <form action="/search" method="post">
+        <input type="submit" value="確認">
+    </form>
+    {% if pig_list %}
+        {% for n in pig_list %}
+        <table border="1">
+            <tr>
+                <th>個体番号</th>
+                <th>年齢</th>
+                <th>回転数</th>
+                <th>産子数1</th>
+                <th>産子数2</th>
+                <th>予測回転数</th>
+            </tr>
+            <tr>
+                <td>{{ n[0] }}</td>
+                <td>{{ n[1] }}歳</td>
+                <td>{{ n[2] }}回</td>
+                <td>{{ n[3] }}匹</td>
+                <td>{{ n[4] }}匹</td>
+                <td>{{ n[5] }}回</td>
+            </tr>
+        </table>
+        {% endfor %}
+    {% endif %}
+    
+    <h2>全体の回転数</h2>
+    <!-- フォーム作成 -->
+    <p>▼ 確認ボタンをぽちっっ</p>
+    <form action="/check" method="post">
+        <input type="submit" value="確認">
+    </form>
+    {% if check_pig %}
+        <p>過去1年間の回転数 : {{ check_pig }} 回</p>
+        {% if check_pig >= 2.2 %}
+            <p>いいみたいだよ</p>
+        {% endif %}
+        
+    {% endif %}
+        
+
+
+
+</body>
+</html>
