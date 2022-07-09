@@ -624,7 +624,7 @@ def search_list(list_number, list_day):
 
 def delete_day_set(pig_no):  # 時限爆弾設置(str型でDBに登録)
     day = Day.get(Day.pig_no == pig_no)
-    delete_day = (datetime.now() + relativedelta.relativedelta(years=1)).strftime(
+    delete_day = (datetime.now() - relativedelta.relativedelta(years=1)).strftime(
         "%Y/%m/%d"
     )
     day.delete_day = delete_day
