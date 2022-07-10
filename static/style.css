@@ -44,6 +44,10 @@ p{
     margin: 30px;
 }
 
+li{
+    margin: 5px;
+}
+
 .condition1{
     font-size:20px;
     margin-top: 30px;
@@ -81,4 +85,9 @@ p{
 table{
     padding: 10px;
     margin-left: 50px;
+}
+
+.mark{
+    background: linear-gradient(transparent 0%, #f9b8fc 0%);
+    border-bottom: solid 2px red;
 }

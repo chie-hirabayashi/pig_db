@@ -151,8 +151,8 @@ def delete_id(id_b, id_e):
         delete(id)
 
 
-id_b = 1
-id_e = 65
+id_b = 131
+id_e = 132
 # delete_id(id_b, id_e)
 
 
@@ -174,4 +174,3 @@ def in_born_data1(pig_no, new_day, new_num):  # born1用関数
 # new_num = 10
 
 # in_born_datac 1(pig_no, new_day, new_num)  # born1入力
-

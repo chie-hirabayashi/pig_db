@@ -20,22 +20,22 @@
             <p>このシステムは、定期的に出産情報を登録することで農場内で子豚をあまり産まない豚(=生産性の低い豚)を見つけだすお手伝いをしてくれます◝(⑅•ᴗ•⑅)◜..°♡</p>
             <p>▼ 使い方</p>
             <ul>
-                <li>農場に新しい豚が来た時は、忘れずに個体番号と入荷日を登録してください！</li>
-                <li>廃用になった豚は忘れずに廃用登録をしてください！！</li>
-                <li>豚が出産した時は、忘れずに出産情報を登録してください！！！</li>
-                <li>確認ボタンで「生産性の悪い豚の抽出」と「全体の回転数」が表示されます</li>
+                <li>農場に新しい豚が来た時は、忘れずに<span class="mark">個体番号と入荷日</span>を登録してください！
+                </li>
+                <li>廃用になった豚は忘れずに<sapn class="mark">廃用登録</sapn>をしてください！！</li>
+                <li>豚が出産した時は、忘れずに<sapn class="mark">出産情報</sapn>を登録してください！！！</li>
+                <li>確認ボタンで<span class="mark">「生産性の悪い豚の抽出」と「全体の回転数」</span>が表示されます</li>
             </ul>
             <p>この3つの作業を行うことで、農場内で生産性の悪い豚をいち早く発見することができます(^◔ᴥ◔^)</p>
             <p class="condition1">★生産性の指標</p>
             <ul>
-                <li class="condition2">回転数 = 365日 / 出産間隔 (簡単にいうと1年間に出産した回数)</li>
+                <li class="condition2">回転数 = 365日 / 出産間隔&emsp;(簡単にいうと1年間に出産した回数&emsp;・・・<span class="mark">2.2</span>を下回ると危険信号)</li>
                 <li class="condition2">予測回転数 = 365日 / 最後の出産日から現在までの期間</li>
-                <li class="condition2">産子数 : 1度に出産した子豚の数 </li>
+                <li class="condition2">産子数 : 1度に出産した子豚の数&emsp;・・・元気だと10匹以上産む </li>
             </ul>
         </article>
-        
-        <h2 class="border-arrange1">現在登録されている豚さんたち</h2>
-        <p>▼ 現在、農場には{{all_l_len}}匹の母豚がいます</p>
+        <h2 class="border-arrange1">登録されている豚さんたち</h2>
+        <p>▼ 現在、農場には<span class="mark">{{all_l_len}}匹</span>の母豚がいます</p>
         {% for n in all_l %}
             {{ n }},
         {% endfor %}
@@ -110,9 +110,9 @@
         <dic class="first"><input type="submit" value="確   認" class="button"></dic>
         <p class="condition1">★ 抽出条件(生産性の低い母豚の抽出)</p>
         <ul>
-            <li class="condition2">実績回転数が2.2以下</li>
-            <li class="condition2">過去2回の産子数が8匹以下</li>
-            <li class="condition2">予測回転数が2.2以下</li>
+            <li class="condition2">実績回転数が<span class="mark">2.2以下</span></li>
+            <li class="condition2">過去2回の産子数が<span class="=mark">8匹以下</span></li>
+            <li class="condition2">予測回転数が<span class="mark">2.2以下</span></li>
         </ul>
     </form>
     <br>
