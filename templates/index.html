@@ -1,31 +1,44 @@
 <!DOCTYPE html>
 <html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <!--  link:css  -->
-    <link rel="stylesheet" href="static/style.css">
-    <!-- CSS only -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
-    <!-- JavaScript Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
-
-</head>
-<body>
-    <h1 class="fs-10 $gry-500"><center>豚さん管理システム(▽•̀(oo)•́ ▽)</center></h1>
-    <article>
-        <h2 class="border-arrange2">(･ω･)b  説明書</h2>
-        <p>このシステムは、定期的に出産情報を登録することで農場内で子豚をあまり産まない豚(=生産性の低い豚)を見つけだすお手伝いをしてくれます◝(⑅•ᴗ•⑅)◜..°♡</p>
-        <p>▼ 使い方</p>
-        <ul>
-            <li>農場に新しい豚が来た時は、忘れずに個体番号と入荷日を登録してください！</li>
-            <li>廃用になった豚は忘れずに廃用登録をしてください！！</li>
-            <li>豚が出産した時は、忘れずに出産情報を登録してください！！！</li>
-        </ul>
-        <p>この3つの作業を行うことで、農場内で生産性の悪い豚をいち早く発見することができます(^◔ᴥ◔^)</p>
-    </article>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <!--  link:css  -->
+        <link rel="stylesheet" href="static/style.css">
+        <!-- CSS only -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+        <!-- JavaScript Bundle with Popper -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+        
+    </head>
+    <body>
+        <h1 class="fs-10 $gry-500"><center>豚さん管理システム(▽•̀(oo)•́ ▽)</center></h1>
+        <article>
+            <h2 class="border-arrange2">(･ω･)b  説明書</h2>
+            <p>このシステムは、定期的に出産情報を登録することで農場内で子豚をあまり産まない豚(=生産性の低い豚)を見つけだすお手伝いをしてくれます◝(⑅•ᴗ•⑅)◜..°♡</p>
+            <p>▼ 使い方</p>
+            <ul>
+                <li>農場に新しい豚が来た時は、忘れずに個体番号と入荷日を登録してください！</li>
+                <li>廃用になった豚は忘れずに廃用登録をしてください！！</li>
+                <li>豚が出産した時は、忘れずに出産情報を登録してください！！！</li>
+                <li>確認ボタンで「生産性の悪い豚の抽出」と「全体の回転数」が表示されます</li>
+            </ul>
+            <p>この3つの作業を行うことで、農場内で生産性の悪い豚をいち早く発見することができます(^◔ᴥ◔^)</p>
+            <p class="condition1">★生産性の指標</p>
+            <ul>
+                <li class="condition2">回転数 = 365日 / 出産間隔 (簡単にいうと1年間に出産した回数)</li>
+                <li class="condition2">予測回転数 = 365日 / 最後の出産日から現在までの期間</li>
+                <li class="condition2">産子数 : 1度に出産した子豚の数 </li>
+            </ul>
+        </article>
+        
+        <h2 class="border-arrange1">現在登録されている豚さんたち</h2>
+        <p>▼ 現在、農場には{{all_l_len}}匹の母豚がいます</p>
+        {% for n in all_l %}
+            {{ n }},
+        {% endfor %}
     
     <h2 class="border-arrange1">新規登録</h2>
     <p>▼ 新規登録する個体番号を入力してください</p>
@@ -95,31 +108,41 @@
     <p>▼ 確認ボタンを押してください</p>
     <form action="/search" method="post">
         <dic class="first"><input type="submit" value="確   認" class="button"></dic>
+        <p class="condition1">★ 抽出条件(生産性の低い母豚の抽出)</p>
+        <ul>
+            <li class="condition2">実績回転数が2.2以下</li>
+            <li class="condition2">過去2回の産子数が8匹以下</li>
+            <li class="condition2">予測回転数が2.2以下</li>
+        </ul>
     </form>
     <br>
     <br>
-
+    
     {% if pig_list %}
-    {% for n in pig_list %}
-    <table>
-        <tr>
-            <th> 個体番号 </th>
-            <th> 年齢 </th>
-            <th> 回転数 </th>
-            <th> 産子数1 </th>
-            <th> 産子数2 </th>
-            <th> 予測回転数 </th>
-        </tr>
+    <table class="table table-hover" border="1">
+        <thead>
+            <tr class="table">
+                <th> 個体番号 </th>
+                <th> 年齢 </th>
+                <th> 産子数1 </th>
+                <th> 産子数2 </th>
+                <th> 回転数 </th>
+                <th> 予測回転数 </th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for n in pig_list %}
         <tr>
             <td>{{ n[0] }}</td>
             <td>{{ n[1] }}歳</td>
-            <td>{{ n[2] }}回</td>
             <td>{{ n[3] }}匹</td>
             <td>{{ n[4] }}匹</td>
+            <td>{{ n[2] }}回</td>
             <td>{{ n[5] }}回</td>
         </tr>
-    </table>
         {% endfor %}
+    </tbody>
+    </table>
     {% endif %}
     <br>
     <br>
@@ -131,11 +154,11 @@
         <dic class="first"><input type="submit" value="確   認" class="button"></dic>
     </form>
     {% if check_pig %}
-        <p class="result">過去1年間の回転数 : {{ check_pig }} 回</p>
-        {% if check_pig >= 2.2 %}
-        <p class="result">(▽•̀(oo)•́ ▽)</p>
-        {% elif 2.2 > check_pig %}
-        <p class="result">(V −(●●)−V)</p>
+    <p class="result">過去1年間の回転数 : {{ check_pig }} 回</p>
+    {% if check_pig >= 2.2 %}
+    <p class="result">(▽•̀(oo)•́ ▽)</p>
+    {% elif 2.2 > check_pig %}
+    <p class="result">(V −(●●)−V)</p>
 
         {% endif %}    
     {% endif %}

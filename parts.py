@@ -5,6 +5,15 @@ from dateutil import relativedelta
 import statistics
 
 
+def mk_all_l():
+    all_list = []
+    for n in Day.select():
+        if n.delete_day == "3000/1/1":
+            no = n.pig_no
+            all_list.append(no)
+    return all_list
+
+
 """ リスト作成 """
 
 
@@ -589,7 +598,8 @@ def search_list(list_number, list_day):
         n1 = int(p_info["num1"])
         n2 = int(p_info["num2"])
         s = int(p_info["span"])
-        if 0 < r < 2.2 or (0 < n1 <= 8 and 0 < n2 <= 8) or 730 > s > 165:
+        if 0 < r < 2.2 or (0 < n1 <= 8 and 0 < n2 <= 8) or 730 > s > 315:
+        # if 0 < r < 2.2 or (0 < n1 <= 8 and 0 < n2 <= 8) or 730 > s > 165:
             rotate = round(365 / s, 2)
             # key = ["NO", "年齢", "回転数", "産子数(1)", "産子数(2)", "予測回転数"]
             value = [
@@ -624,7 +634,7 @@ def search_list(list_number, list_day):
 
 def delete_day_set(pig_no):  # 時限爆弾設置(str型でDBに登録)
     day = Day.get(Day.pig_no == pig_no)
-    delete_day = (datetime.now() - relativedelta.relativedelta(years=1)).strftime(
+    delete_day = (datetime.now() + relativedelta.relativedelta(years=1)).strftime(
         "%Y/%m/%d"
     )
     day.delete_day = delete_day

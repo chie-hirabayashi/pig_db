@@ -7,6 +7,7 @@ from parts import (
     delete_day_set,
     list_day,
     list_number,
+    mk_all_l,
     pig_info_dic,
     search_list,
 )
@@ -29,9 +30,17 @@ from parts import (
 app = Flask(__name__)
 
 
+# @app.route("/")
+# def index():
+#     return render_template("index.html")
+
+
 @app.route("/")
 def index():
-    return render_template("index.html")
+    all_l = mk_all_l()
+    all_l_len = len(all_l)
+
+    return render_template("index.html", all_l=all_l, all_l_len=all_l_len)
 
 
 @app.route("/day")
